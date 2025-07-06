@@ -5,3 +5,7 @@ ng new maps-app --routing=true --style=css --package-manager=npm
 
 
 npm install @angular/google-maps primeng primeicons
+
+
+Meeting ID: 365 322 053 455 8
+Passcode: bx6eg6dQ
