@@ -14,3 +14,8 @@ Download from: https://github.com/coreybutler/nvm-windows/releases
 
 npx create-nx-workspace@latest maps-workspace --preset=angular-monorepo --appName=maps-app --style=css --routing=true --packageManager=npm
 
+# Alternative: Create empty workspace and add Angular later
+# npx create-nx-workspace@latest maps-workspace --preset=apps --packageManager=npm
+# cd maps-workspace
+# nx g @nx/angular:application maps-app --routing=true --style=css
+
