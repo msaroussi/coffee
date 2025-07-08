@@ -12,3 +12,5 @@ https://github.com/msaroussi/tiuli.git
 
 Download from: https://github.com/coreybutler/nvm-windows/releases
 
+npx create-nx-workspace@latest maps-workspace --preset=angular-monorepo --appName=maps-app --style=css --routing=true --packageManager=npm
+
