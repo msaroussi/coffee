@@ -8,3 +8,7 @@ npm install @angular/google-maps primeng primeicons
 
 
 https://github.com/msaroussi/tiuli.git
+
+
+Download from: https://github.com/coreybutler/nvm-windows/releases
+
