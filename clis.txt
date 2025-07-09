@@ -1,0 +1,139 @@
+# 1. Create new Nx workspace
+npx create-nx-workspace@latest maps-workspace --preset=angular-monorepo --appName=maps-app --style=css --routing=true --packageManager=npm
+
+# Alternative: Create empty workspace and add Angular later
+# npx create-nx-workspace@latest maps-workspace --preset=apps --packageManager=npm
+# cd maps-workspace
+# nx g @nx/angular:application maps-app --routing=true --style=css
+
+cd maps-workspace
+
+# 2. Install required dependencies for the workspace
+npm install @angular/google-maps primeng primeicons
+
+# 3. Generate Angular application (if not created during workspace setup)
+# nx g @nx/angular:application maps-app --routing=true --style=css --directory=apps
+
+# 4. Generate shared libraries (recommended for monorepo)
+nx g @nx/angular:library shared-ui --directory=libs --buildable=true
+nx g @nx/angular:library map-core --directory=libs --buildable=true
+nx g @nx/angular:library shared-data --directory=libs --buildable=true
+
+# 5. Generate components in the main application
+nx g @nx/angular:component components/map --project=maps-app
+nx g @nx/angular:component components/top-bar --project=maps-app
+nx g @nx/angular:component components/left-bar --project=maps-app
+nx g @nx/angular:component components/right-bar --project=maps-app
+
+# 6. Generate shared components in libraries
+nx g @nx/angular:component map --project=shared-ui --export=true
+nx g @nx/angular:component panel --project=shared-ui --export=true
+nx g @nx/angular:component card --project=shared-ui --export=true
+
+# 7. Generate services in shared libraries
+nx g @nx/angular:service services/map --project=map-core
+nx g @nx/angular:service services/location --project=map-core
+nx g @nx/angular:service services/geocoding --project=map-core
+
+# 8. Generate data access services
+nx g @nx/angular:service data-access/map-data --project=shared-data
+nx g @nx/angular:service data-access/location-data --project=shared-data
+
+# 9. Generate interfaces and models
+nx g @nx/angular:interface models/location --project=shared-data
+nx g @nx/angular:interface models/map-options --project=shared-data
+nx g @nx/angular:interface models/marker --project=shared-data
+
+# 10. Generate additional applications for different environments
+nx g @nx/angular:application maps-admin --routing=true --style=css --directory=apps
+nx g @nx/angular:application maps-mobile --routing=true --style=css --directory=apps
+
+# 11. Generate E2E tests
+nx g @nx/cypress:e2e maps-app-e2e --project=maps-app
+
+# 12. Build commands
+# Build specific application
+nx build maps-app
+
+# Build all applications
+nx run-many --target=build --all
+
+# Build with production configuration
+nx build maps-app --configuration=production
+
+# 13. Serve commands
+# Serve specific application
+nx serve maps-app
+
+# Serve with specific port
+nx serve maps-app --port=4200
+
+# 14. Test commands
+# Test specific project
+nx test maps-app
+
+# Test specific library
+nx test shared-ui
+
+# Test all projects
+nx run-many --target=test --all
+
+# 15. Lint commands
+# Lint specific project
+nx lint maps-app
+
+# Lint all projects
+nx run-many --target=lint --all
+
+# 16. Generate additional useful items
+# Generate guards
+nx g @nx/angular:guard guards/map --project=maps-app
+
+# Generate pipes
+nx g @nx/angular:pipe pipes/coordinate-format --project=shared-ui --export=true
+nx g @nx/angular:pipe pipes/distance-format --project=shared-ui --export=true
+
+# Generate interceptors
+nx g @nx/angular:interceptor interceptors/api --project=shared-data
+
+# Generate resolvers
+nx g @nx/angular:resolver resolvers/map-data --project=maps-app
+
+# 17. Generate feature libraries (recommended approach)
+nx g @nx/angular:library feature-map --directory=libs --routing=true
+nx g @nx/angular:library feature-navigation --directory=libs --routing=true
+nx g @nx/angular:library feature-search --directory=libs --routing=true
+
+# Generate components in feature libraries
+nx g @nx/angular:component map --project=feature-map --export=true
+nx g @nx/angular:component navigation --project=feature-navigation --export=true
+nx g @nx/angular:component search --project=feature-search --export=true
+
+# 18. Workspace maintenance commands
+# Check dependency graph
+nx graph
+
+# Show affected projects (useful for CI/CD)
+nx affected:build
+nx affected:test
+nx affected:lint
+
+# Update Nx workspace
+nx migrate latest
+
+# Check workspace health
+nx workspace-lint
+
+# 19. Library-specific commands
+# Build libraries
+nx build shared-ui
+nx build map-core
+nx build shared-data
+
+# Publish libraries (if needed)
+nx build shared-ui --prod
+nx publish shared-ui
+
+# 20. Docker commands (if needed)
+# Generate Dockerfile
+nx g @nx/node:dockerfile maps-app
